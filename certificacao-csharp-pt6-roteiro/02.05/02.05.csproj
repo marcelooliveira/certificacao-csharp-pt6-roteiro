@@ -3,15 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>_02._01</RootNamespace>
+    <RootNamespace>_02._05</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Ex03.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Ex03.md" />
-  </ItemGroup>
 
 </Project>
