@@ -9,48 +9,59 @@ namespace _01._04
     {
         static void Main(string[] args)
         {
-            LojaDeFilmes loja = new LojaDeFilmes
+            LojaDeFilmes loja = ObterDados();
+
+            var json = JsonConvert.SerializeObject(loja);
+            using (var writer = new StreamWriter("loja.json"))
+            {
+                writer.Write(json);
+            }
+        }
+
+        private static LojaDeFilmes ObterDados()
+        {
+            return new LojaDeFilmes
             {
                 Diretores = new List<Diretor>
                 {
-                    new Diretor { Nome = "James Cameron" },
-                    new Diretor { Nome = "Francis Lawrence" },
-                    new Diretor { Nome = "Zack Snyder" },
-                    new Diretor { Nome = "Joss Whedon" },
-                    new Diretor { Nome = "Martin Scorsese" },
-                    new Diretor { Nome = "Christopher Nolan" },
-                    new Diretor { Nome = "Scott Derrickson" },
-                    new Diretor { Nome = "Gareth Edwards" },
-                    new Diretor { Nome = "Justin Kurzel" }
+                    new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
+                    new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
+                    new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
+                    new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
+                    new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 }
                 },
                 Filmes = new List<Filme> {
                     new Filme {
-                        Diretor = new Diretor { Nome = "James Cameron" },
+                        Diretor = new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
                         Titulo = "Avatar",
                         Ano = "2009"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Francis Lawrence" },
+                        Diretor = new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
                         Titulo = "I Am Legend",
                         Ano = "2007"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Zack Snyder" },
+                        Diretor = new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
                         Titulo = "300",
                         Ano = "2006"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Joss Whedon" },
+                        Diretor = new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
                         Titulo = "The Avengers",
                         Ano = "2012"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Martin Scorsese" },
+                        Diretor = new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
                         Titulo = "The Wolf of Wall Street",
                         Ano = "2013"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Christopher Nolan" },
+                        Diretor = new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
                         Titulo = "Interstellar",
                         Ano = "2014"
                     },
@@ -85,17 +96,17 @@ namespace _01._04
                         Ano = "2008–2013"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Scott Derrickson" },
+                        Diretor = new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
                         Titulo = "Doctor Strange",
                         Ano = "2016"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Gareth Edwards" },
+                        Diretor = new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
                         Titulo = "Rogue One: A Star Wars Story",
                         Ano = "2016"
                     },
                     new Filme {
-                        Diretor = new Diretor { Nome = "Justin Kurzel" },
+                        Diretor = new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 },
                         Titulo = "Assassin's Creed",
                         Ano = "2016"
                     },
@@ -106,21 +117,14 @@ namespace _01._04
                     }
                 }
             };
-
-            var json = JsonConvert.SerializeObject(loja);
-            using (var writer = new StreamWriter("loja.json"))
-            {
-                writer.Write(json);
-            }
         }
     }
 
     class Diretor
     {
         public string Nome { get; set; }
-
         [NonSerialized]
-        public int tempData;
+        public int NumeroFilmes;
     }
 
     class Filme
@@ -136,9 +140,9 @@ namespace _01._04
         public List<Filme> Filmes = new List<Filme>();
         public static LojaDeFilmes AdicionarFilme()
         {
-            LojaDeFilmes result = new LojaDeFilmes();
+            LojaDeFilmes loja = new LojaDeFilmes();
             // ...
-            return result;
+            return loja;
         }
     }
 }
