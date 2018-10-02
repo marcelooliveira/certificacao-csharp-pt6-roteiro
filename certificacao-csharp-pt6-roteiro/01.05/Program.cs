@@ -45,7 +45,7 @@ namespace _01._05
         [DataMember]
         public string Titulo { get; set; }
         [DataMember]
-        public int DuracaoMinutos { get; set; }
+        public int Ano { get; set; }
     }
 
     [Serializable]

@@ -37,7 +37,7 @@ namespace _01._03
     {
         public Diretor Diretor { get; set; }
         public string Titulo { get; set; }
-        public int DuracaoMinutos { get; set; }
+        public int Ano { get; set; }
     }
 
     [Serializable]
