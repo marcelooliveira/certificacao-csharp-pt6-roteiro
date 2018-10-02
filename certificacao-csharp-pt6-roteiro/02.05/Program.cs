@@ -1,11 +1,15 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System.Linq;
+=======
+>>>>>>> 036a488381c363358bec2eea7d0ff8451f24cd58
 
 namespace _02._05
 {
     class Program
     {
+<<<<<<< HEAD
         static Queue<string> pedagio = new Queue<string>();
 
         static void Main(string[] args)
@@ -69,6 +73,11 @@ namespace _02._05
             {
                 Console.WriteLine(v);
             }
+=======
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+>>>>>>> 036a488381c363358bec2eea7d0ff8451f24cd58
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
+=======
+>>>>>>> 036a488381c363358bec2eea7d0ff8451f24cd58
 
 namespace _02._04
 {
@@ -7,6 +10,7 @@ namespace _02._04
     {
         static void Main(string[] args)
         {
+<<<<<<< HEAD
             //SETS = CONJUNTOS
 
             //Duas propriedades do Set
@@ -60,6 +64,9 @@ namespace _02._04
             alunosEmLista.Sort();
             //imprimindo copia
             Console.WriteLine(string.Join(",", alunosEmLista));
+=======
+            Console.WriteLine("Hello World!");
+>>>>>>> 036a488381c363358bec2eea7d0ff8451f24cd58
         }
     }
 }

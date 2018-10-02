@@ -1,50 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace _01._05
+namespace _01._01
 {
     class Program
     {
         static void Main(string[] args)
         {
             LojaDeFilmes loja = LojaDeFilmes.TestData();
-            DataContractSerializer formatter = new DataContractSerializer(typeof(LojaDeFilmes));
+            BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream outputStream =
-                new FileStream("Filmes.xml", FileMode.OpenOrCreate, FileAccess.Write))
+            new FileStream("Filmes.bin", FileMode.OpenOrCreate, FileAccess.Write))
             {
-                formatter.WriteObject(outputStream, loja);
+                formatter.Serialize(outputStream, loja);
             }
 
             LojaDeFilmes inputData;
-            using (FileStream inputStream =
-            new FileStream("Filmes.xml", FileMode.Open, FileAccess.Read))
+            using (FileStream inputStream = new FileStream("Filmes.bin", FileMode.Open, FileAccess.Read))
             {
-                inputData = (LojaDeFilmes)formatter.ReadObject(inputStream);
+                inputData = (LojaDeFilmes)formatter.Deserialize(inputStream);
             }
         }
     }
 
-    [DataContract]
+    [Serializable]
     class Diretor
     {
-        [DataMember]
-        public int ID { get; set; }
-        [DataMember]
         public string Nome { get; set; }
+
+        [NonSerialized]
+        public int tempData;
     }
 
-    [DataContract]
+    [Serializable]
     class Filme
     {
-        [DataMember]
-        public int ID { get; set; }
-        [DataMember]
         public Diretor Diretor { get; set; }
-        [DataMember]
         public string Titulo { get; set; }
-        [DataMember]
         public int DuracaoMinutos { get; set; }
     }
 
