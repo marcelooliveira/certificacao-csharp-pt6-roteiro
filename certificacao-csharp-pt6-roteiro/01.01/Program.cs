@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _01._03_2;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -17,24 +18,25 @@ namespace _01._03
                 xmlSerializer.Serialize(stringWriter, loja);
                 Console.WriteLine(stringWriter);
             }
-            using (FileStream fileStream = new FileStream("Loja.xml", FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fileStream = new FileStream("Loja.xml", FileMode.Create, FileAccess.Write))
             {
                 xmlSerializer.Serialize(fileStream, loja);
             }
 
-            LojaDeFilmes copiaLoja;
+            XmlSerializer xmlSerializer2 = new XmlSerializer(typeof(MovieStore));
+            MovieStore movieStore;
             using (FileStream fileStream =
                 new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
             {
                 using (var reader = new StreamReader(fileStream))
                 {
-                    copiaLoja = (LojaDeFilmes)xmlSerializer.Deserialize(reader);
+                    movieStore = (MovieStore)xmlSerializer2.Deserialize(reader);
                 }
             }
 
-            foreach (var filme in copiaLoja.Filmes)
+            foreach (var movie in movieStore.Movies)
             {
-                Console.WriteLine(filme.Titulo);
+                Console.WriteLine(movie.Title);
             }
             Console.ReadKey();
         }
@@ -138,35 +140,6 @@ namespace _01._03
                     }
                 }
             };
-        }
-    }
-
-    [Serializable]
-    public class Diretor
-    {
-        public string Nome { get; set; }
-        [NonSerialized]
-        public int NumeroFilmes;
-    }
-
-    [Serializable]
-    public class Filme
-    {
-        public Diretor Diretor { get; set; }
-        public string Titulo { get; set; }
-        public string Ano { get; set; }
-    }
-
-    [Serializable]
-    public class LojaDeFilmes
-    {
-        public List<Diretor> Diretores = new List<Diretor>();
-        public List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes AdicionarFilme()
-        {
-            LojaDeFilmes loja = new LojaDeFilmes();
-            // ...
-            return loja;
         }
     }
 }
