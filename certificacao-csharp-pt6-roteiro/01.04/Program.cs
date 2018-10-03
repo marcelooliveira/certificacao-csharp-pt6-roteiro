@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace _01._04
 {
@@ -11,13 +11,26 @@ namespace _01._04
         {
             LojaDeFilmes loja = ObterDados();
 
-            var ser = new JavaScriptSerializer();
+            DataContractSerializer formatter = new DataContractSerializer(typeof(LojaDeFilmes));
+            using (FileStream outputStream =
+                new FileStream("Filmes.xml", FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                formatter.WriteObject(outputStream, loja);
+            }
 
-            //var json = JsonConvert.SerializeObject(loja);
-            //using (var writer = new StreamWriter("loja.json"))
-            //{
-            //    writer.Write(json);
-            //}
+            LojaDeFilmes inputData;
+            using (FileStream inputStream =
+            new FileStream("Filmes.xml", FileMode.Open, FileAccess.Read))
+            {
+                inputData = (LojaDeFilmes)formatter.ReadObject(inputStream);
+            }
+
+            foreach (var filme in inputData.Filmes)
+            {
+                Console.WriteLine(filme.Titulo);
+            }
+
+            Console.ReadKey();
         }
 
         private static LojaDeFilmes ObterDados()
@@ -122,29 +135,36 @@ namespace _01._04
         }
     }
 
-    class Diretor
+    [DataContract]
+    public class Diretor
     {
+        [DataMember]
         public string Nome { get; set; }
-        [NonSerialized]
+        [IgnoreDataMember]
         public int NumeroFilmes;
     }
 
-    class Filme
+    [DataContract]
+    public class Filme
     {
+        [DataMember]
         public Diretor Diretor { get; set; }
+        [DataMember]
         public string Titulo { get; set; }
+        [DataMember]
         public string Ano { get; set; }
     }
 
-    class LojaDeFilmes
+    [Serializable]
+    public class LojaDeFilmes
     {
         public List<Diretor> Diretores = new List<Diretor>();
         public List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes AdicionarFilme()
+        public static LojaDeFilmes TestData()
         {
-            LojaDeFilmes loja = new LojaDeFilmes();
+            LojaDeFilmes result = new LojaDeFilmes();
             // ...
-            return loja;
+            return result;
         }
     }
 }

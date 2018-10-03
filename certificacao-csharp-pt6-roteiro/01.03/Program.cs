@@ -1,7 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 
 namespace _01._03
 {
@@ -11,31 +16,24 @@ namespace _01._03
         {
             LojaDeFilmes loja = ObterDados();
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
-            using (StringWriter stringWriter = new StringWriter())
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream outputStream =
+            new FileStream("Filmes.bin", FileMode.OpenOrCreate, FileAccess.Write))
             {
-                xmlSerializer.Serialize(stringWriter, loja);
-                Console.WriteLine(stringWriter);
-            }
-            using (FileStream fileStream = new FileStream("Loja.xml", FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                xmlSerializer.Serialize(fileStream, loja);
+                formatter.Serialize(outputStream, loja);
             }
 
-            LojaDeFilmes copiaLoja;
-            using (FileStream fileStream =
-                new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
+            LojaDeFilmes inputData;
+            using (FileStream inputStream = new FileStream("Filmes.bin", FileMode.Open, FileAccess.Read))
             {
-                using (var reader = new StreamReader(fileStream))
-                {
-                    copiaLoja = (LojaDeFilmes)xmlSerializer.Deserialize(reader);
-                }
+                inputData = (LojaDeFilmes)formatter.Deserialize(inputStream);
             }
 
-            foreach (var filme in copiaLoja.Filmes)
+            foreach (var filme in inputData.Filmes)
             {
                 Console.WriteLine(filme.Titulo);
             }
+
             Console.ReadKey();
         }
 
@@ -139,10 +137,11 @@ namespace _01._03
                 }
             };
         }
+
     }
 
     [Serializable]
-    public class Diretor
+    class Diretor
     {
         public string Nome { get; set; }
         [NonSerialized]
@@ -150,7 +149,7 @@ namespace _01._03
     }
 
     [Serializable]
-    public class Filme
+    class Filme
     {
         public Diretor Diretor { get; set; }
         public string Titulo { get; set; }
@@ -158,15 +157,15 @@ namespace _01._03
     }
 
     [Serializable]
-    public class LojaDeFilmes
+    class LojaDeFilmes
     {
         public List<Diretor> Diretores = new List<Diretor>();
         public List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes AdicionarFilme()
+        public static LojaDeFilmes TestData()
         {
-            LojaDeFilmes loja = new LojaDeFilmes();
+            LojaDeFilmes result = new LojaDeFilmes();
             // ...
-            return loja;
+            return result;
         }
     }
 }

@@ -1,119 +1,132 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace _02._02
+namespace _02._03
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //os elementos que entrarão no array
+            //os elementos que entrarão na lista
             string aulaIntro = "Introdução às Coleções";
             string aulaModelando = "Modelando a Classe Aula";
             string aulaSets = "Trabalhando com Conjuntos";
 
-            ////inicializando um array populado
-            //string[] aulas = new string[]
+            ////inicializando uma lista populada
+            //List<string> aulas = new List<string>
             //{
             //    aulaIntro,
             //    aulaModelando,
             //    aulaSets
             //};
 
-            ////inicializando um array populado (SINTAXE SIMPLIFICADA)
-            //string[] aulas = 
-            //{
-            //    aulaIntro,
-            //    aulaModelando,
-            //    aulaSets
-            //};
-
-            //declarando um array vazio de tamanho 3
-            string[] aulas = new string[3];
-            //preenchendo posições no array pelo índice
-            aulas[0] = aulaIntro;
-            aulas[1] = aulaModelando;
-            aulas[2] = aulaSets;
-
-            //A linha abaixo não imprime os elementos!
-            Console.WriteLine(aulas); //System.String[]
+            //declarando uma lista vazia
+            List<string> aulas = new List<string>();
+            //alimentando a lista com método Add
+            aulas.Add(aulaIntro);
+            aulas.Add(aulaModelando);
+            aulas.Add(aulaSets);
 
             Imprimir(aulas);
+
+            //Pegando o primeiro elemento (usando índice)
+            Console.WriteLine("A primeira aula é " + aulas[0]);
+            //Pegando o primeiro elemento (usando LINQ)
+            Console.WriteLine("A primeira aula é " + aulas.First());
+
+            //Pegando o último elemento (usando índice)
+            Console.WriteLine("A última aula é " + aulas[aulas.Count - 1]);
+            //Pegando o último elemento (usando LINQ)
+            Console.WriteLine("A última aula é " + aulas.Last());
+
+            //modificando elemento pelo índice
+            aulas[0] = "Trabalhando com Listas";
+            Imprimir(aulas);
+
+            //Obtendo primeiro elemento que atende uma condição
+            //(usando LINQ e expressão lambda no predicate)
+            Console.WriteLine("A primeira aula 'Trabalhando' é: "
+                + aulas.First(aula => aula.Contains("Trabalhando")));
+
+            //Obtendo último elemento que atende uma condição
+            //(usando LINQ e expressão lambda no predicate)
+            Console.WriteLine("A última aula 'Trabalhando' é: "
+                + aulas.Last(aula => aula.Contains("Trabalhando")));
+
+            ////Obtendo primeiro elemento que atende uma condição,
+            ////mas nenhum elemento atende, logo obtemos uma exceção!
+            //Console.WriteLine("A primeira aula 'Conclusão' é: "
+            //    + aulas.First(aula => aula.Contains("Conclusão")));
 
             Console.WriteLine();
 
-            //Pegando o primeiro elemento
-            Console.WriteLine(aulas[0]);
-            //Pegando o último elemento
-            Console.WriteLine(aulas[aulas.Length - 1]);
-
-            //Modificando um elemento do array: ASSIM NÃO FUNCIONA!
-            aulaIntro = "Trabalhando com Arrays";
-            Imprimir(aulas);
-
-            //Modificando um elemento do array: DESSE JEITO FUNCIONA!
-            aulas[0] = "Trabalhando com Arrays";
-            Imprimir(aulas);
+            //Obtendo o primeiro elemento que atende uma condição OU
+            //um valor default (null) se não houver nenhum
+            //(de forma segura e sem gerar exceção)
+            Console.WriteLine("A primeira aula 'Conclusão' é: "
+                + aulas.FirstOrDefault(aula => aula.Contains("Conclusão")));
 
             Console.WriteLine();
 
-            //Localizando a primeira ocorrência no array
-            Console.WriteLine("Aula 'modelando' está no índice " + Array.IndexOf(aulas, aulaModelando));
-            //Localizando a última ocorrência no array
-            Console.WriteLine(Array.LastIndexOf(aulas, aulaModelando));
-
-            //Revertendo a sequência do array
-            Array.Reverse(aulas);
+            //Revertendo a sequência da lista
+            aulas.Reverse();
             Imprimir(aulas);
 
-            //Revertendo NOVAMENTE a sequência do array
-            Array.Reverse(aulas);
+            //Revertendo NOVAMENTE a sequência da lista
+            aulas.Reverse();
             Imprimir(aulas);
 
-            //Redimensionando um array (truncando a última posição)
-            Array.Resize(ref aulas, 2);
+            //Removendo o último elemento (por índice)
+            aulas.RemoveAt(aulas.Count - 1);
             Imprimir(aulas);
 
-            //Redimensionando um array (deixando a última posição vazia)
-            Array.Resize(ref aulas, 3);
+            //Adicionando um elemento (ao final da lista)
+            aulas.Add("Conclusão");
             Imprimir(aulas);
 
-            //Preenchendo a última posição do Array
-            aulas[aulas.Length - 1] = "Conclusão";
+            //Ordenando a lista pela ordem natural dos elementos (alfabética)
+            aulas.Sort();
             Imprimir(aulas);
 
-            //Ordenando o Array pela ordem natural dos elementos (alfabética)
-            Array.Sort(aulas);
+            //Ordenando a lista através de um comparador custom,
+            //por ordem de tamanho da string
+            aulas.Sort((aula1, aula2) => aula1.Length.CompareTo(aula2.Length));
             Imprimir(aulas);
 
-            //Copiando um Array em outro
-            string[] copia = new string[2];
-            Array.Copy(aulas, 1, copia, 0, 2);
+            //Copiando os 2 últimos elementos de uma lista para
+            //uma nova lista
+            List<string> copia = aulas.GetRange(aulas.Count - 2, 2);
             Imprimir(copia);
 
-            //Clonando um Array em um novo Array (note o cast as string[])
-            string[] clone = aulas.Clone() as string[];
+            //Clonando a lista de aulas para uma outra lista 
+            List<string> clone = new List<string>(aulas);
             Imprimir(clone);
 
-            //Limpando alguns índices do Array
-            Array.Clear(clone, 1, 2);
+            //Removendo os dois últimos elementos da lista, pelo índice
+            clone.RemoveRange(clone.Count - 2, 2);
             Imprimir(clone);
         }
 
-        private static void Imprimir(string[] aulas)
+        private static void Imprimir(List<string> aulas)
         {
             Console.WriteLine();
-
-            ////Enumerando um array (laço FOREACH é mais simples)
+            ////Enumerando uma lista (laço FOREACH é mais simples)
             //foreach (var aula in aulas)
             //{
             //    Console.WriteLine(aula);
             //}
 
-            //Enumerando um array (laço FOR permite mais controle!)
-            for (int i = 0; i < aulas.Length; i++)
-            {
-                Console.WriteLine(aulas[i]);
-            }
+            //Enumerando uma lista (laço FOR permite mais controle!)
+            //for (int i = 0; i < aulas.Count; i++)
+            //{
+            //    Console.WriteLine(aulas[i]);
+            //}
+
+            //Método ForEach: 
+            //Executa uma ação (Action) para cada elemento do array
+            aulas.ForEach(aula => Console.WriteLine(aula));
+            Console.WriteLine();
         }
     }
 }

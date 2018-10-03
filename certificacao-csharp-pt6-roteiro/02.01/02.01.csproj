@@ -6,12 +6,4 @@
     <RootNamespace>_02._01</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Ex03.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Ex03.md" />
-  </ItemGroup>
-
 </Project>

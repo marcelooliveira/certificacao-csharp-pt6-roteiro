@@ -1,132 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace _02._03
+namespace _02._01
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //os elementos que entrarão na lista
-            string aulaIntro = "Introdução às Coleções";
-            string aulaModelando = "Modelando a Classe Aula";
-            string aulaSets = "Trabalhando com Conjuntos";
+            //vamos declarar o curso
+            Curso csharpColecoes = new Curso("C# Colecoes", "Marcelo Oliveira");
+            //...e adicionar 3 aulas a esse curso
+            //Trabalhando com Listas - 21 minutos;
+            //Criando uma Aula - 20 minutos
+            //Modelando com Coleções - 24 minutos
+            csharpColecoes.Adiciona(new Aula("Trabalhando com Listas", 21));
+            csharpColecoes.Adiciona(new Aula("Criando uma Aula", 20));
+            csharpColecoes.Adiciona(new Aula("Modelando com Coleções", 24));
+            //um aluno também tem matrícula!
+            //vamos criar a class Aluno com Nome e NumeroMatricula
 
-            ////inicializando uma lista populada
-            //List<string> aulas = new List<string>
-            //{
-            //    aulaIntro,
-            //    aulaModelando,
-            //    aulaSets
-            //};
+            //Instanciando 3 alunos com suas matrícula:
+            //Vanessa Tonini - 34672
+            //Ana Losnak - 5617
+            //Rafael Nercessian - 17645
+            Aluno a1 = new Aluno("Vanessa Tonini", 34672);
+            Aluno a2 = new Aluno("Ana Losnak", 5617);
+            Aluno a3 = new Aluno("Rafael Nercessian", 17645);
+            //Precisamos Matricular os alunos no curso, criando um método
+            csharpColecoes.Matricula(a1);
+            csharpColecoes.Matricula(a2);
+            csharpColecoes.Matricula(a3);
 
-            //declarando uma lista vazia
-            List<string> aulas = new List<string>();
-            //alimentando a lista com método Add
-            aulas.Add(aulaIntro);
-            aulas.Add(aulaModelando);
-            aulas.Add(aulaSets);
+            //Imprimindo os alunos matriculados
+            Console.WriteLine("Imprimindo os alunos matriculados");
+            foreach (var aluno in csharpColecoes.Alunos)
+            {
+                Console.WriteLine(aluno);
+            }
+            //no formato "[Nome: , Matrícula: ]"
 
-            Imprimir(aulas);
+            //Imprimir: "O aluno a1 está matriculado?"
+            Console.WriteLine($"O aluno a1 {a1.Nome} está matriculado?");
+            //Criar um método EstaMatriculado
+            Console.WriteLine(csharpColecoes.EstaMatriculado(a1));
+            //Vamos instanciar uma aluna (Vanessa Tonini)
+            Aluno tonini = new Aluno("Vanessa Tonini", 34672);
+            //e verificar se Tonini está matriculada
+            Console.WriteLine("Tonini está matriculada? " + csharpColecoes.EstaMatriculado(tonini));
+            //Mas a1 == a Tonini?
+            Console.WriteLine("a1 == a Tonini?");
+            Console.WriteLine(a1 == tonini);
+            //O que ocorreu? a1 é equals a Tonini?
+            Console.WriteLine("a1 é equals a Tonini?");
+            Console.WriteLine(a1.Equals(tonini));
 
-            //Pegando o primeiro elemento (usando índice)
-            Console.WriteLine("A primeira aula é " + aulas[0]);
-            //Pegando o primeiro elemento (usando LINQ)
-            Console.WriteLine("A primeira aula é " + aulas.First());
+            //limpando o console
+            Console.Clear();
+            //já temos método para saber se o aluno está matriculado.
+            //Mas agora precisamos buscar aluno por número de matrícula
 
-            //Pegando o último elemento (usando índice)
-            Console.WriteLine("A última aula é " + aulas[aulas.Count - 1]);
-            //Pegando o último elemento (usando LINQ)
-            Console.WriteLine("A última aula é " + aulas.Last());
+            //pergunta: "Quem é o aluno com matrícula 5617?"
+            Console.WriteLine("Quem é o aluno com matrícula 5617?");
+            //implementando Curso.BuscaMatriculado
+            Aluno aluno5617 = csharpColecoes.BuscaMatriculado(5617);
+            //imprimindo o aluno5617 encontrado
+            Console.WriteLine("aluno5617: " + aluno5617);
+            //Funciona! Mas essa busca é eficiente?
+            //Introduzindo uma nova coleção: dicionário
+            //Um dicionário permite associar uma chave (no caso, matrícula)
+            //a um valor (o aluno)
+            //Vamos implementar um dicionário de alunos em Curso
 
-            //modificando elemento pelo índice
-            aulas[0] = "Trabalhando com Listas";
-            Imprimir(aulas);
+            //Quem é o aluno 5618?
+            Console.WriteLine("Quem é o aluno 5618?");
+            Console.WriteLine(csharpColecoes.BuscaMatriculado(5618));
 
-            //Obtendo primeiro elemento que atende uma condição
-            //(usando LINQ e expressão lambda no predicate)
-            Console.WriteLine("A primeira aula 'Trabalhando' é: "
-                + aulas.First(aula => aula.Contains("Trabalhando")));
+            //e se tentarmos adicionar outro aluno com mesma chave 5617?
+            Aluno fabio = new Aluno("Fabio Gushiken", 5617);
+            //csharpColecoes.Matricula(fabio);
+            //e se quisermos trocar o aluno que tem a mesma chave?
+            csharpColecoes.SubstituiAluno(fabio);
+            //pergunta: "Quem é o Aluno 5617 agora?"
+            Console.WriteLine("Quem é o Aluno 5617 agora?");
+            Console.WriteLine(csharpColecoes.BuscaMatriculado(5617));
 
-            //Obtendo último elemento que atende uma condição
-            //(usando LINQ e expressão lambda no predicate)
-            Console.WriteLine("A última aula 'Trabalhando' é: "
-                + aulas.Last(aula => aula.Contains("Trabalhando")));
-
-            ////Obtendo primeiro elemento que atende uma condição,
-            ////mas nenhum elemento atende, logo obtemos uma exceção!
-            //Console.WriteLine("A primeira aula 'Conclusão' é: "
-            //    + aulas.First(aula => aula.Contains("Conclusão")));
-
-            Console.WriteLine();
-
-            //Obtendo o primeiro elemento que atende uma condição OU
-            //um valor default (null) se não houver nenhum
-            //(de forma segura e sem gerar exceção)
-            Console.WriteLine("A primeira aula 'Conclusão' é: "
-                + aulas.FirstOrDefault(aula => aula.Contains("Conclusão")));
-
-            Console.WriteLine();
-
-            //Revertendo a sequência da lista
-            aulas.Reverse();
-            Imprimir(aulas);
-
-            //Revertendo NOVAMENTE a sequência da lista
-            aulas.Reverse();
-            Imprimir(aulas);
-
-            //Removendo o último elemento (por índice)
-            aulas.RemoveAt(aulas.Count - 1);
-            Imprimir(aulas);
-
-            //Adicionando um elemento (ao final da lista)
-            aulas.Add("Conclusão");
-            Imprimir(aulas);
-
-            //Ordenando a lista pela ordem natural dos elementos (alfabética)
-            aulas.Sort();
-            Imprimir(aulas);
-
-            //Ordenando a lista através de um comparador custom,
-            //por ordem de tamanho da string
-            aulas.Sort((aula1, aula2) => aula1.Length.CompareTo(aula2.Length));
-            Imprimir(aulas);
-
-            //Copiando os 2 últimos elementos de uma lista para
-            //uma nova lista
-            List<string> copia = aulas.GetRange(aulas.Count - 2, 2);
-            Imprimir(copia);
-
-            //Clonando a lista de aulas para uma outra lista 
-            List<string> clone = new List<string>(aulas);
-            Imprimir(clone);
-
-            //Removendo os dois últimos elementos da lista, pelo índice
-            clone.RemoveRange(clone.Count - 2, 2);
-            Imprimir(clone);
-        }
-
-        private static void Imprimir(List<string> aulas)
-        {
-            Console.WriteLine();
-            ////Enumerando uma lista (laço FOREACH é mais simples)
-            //foreach (var aula in aulas)
-            //{
-            //    Console.WriteLine(aula);
-            //}
-
-            //Enumerando uma lista (laço FOR permite mais controle!)
-            //for (int i = 0; i < aulas.Count; i++)
-            //{
-            //    Console.WriteLine(aulas[i]);
-            //}
-
-            //Método ForEach: 
-            //Executa uma ação (Action) para cada elemento do array
-            aulas.ForEach(aula => Console.WriteLine(aula));
-            Console.WriteLine();
+            //Como um dicionário armazena os valores (diagrama)
+            ///<image url="$(ProjectDir)\Slides\image2.png" scale=""/>
         }
     }
 }

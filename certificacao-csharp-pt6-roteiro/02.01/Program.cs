@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace _02._01
 {
@@ -7,85 +6,114 @@ namespace _02._01
     {
         static void Main(string[] args)
         {
-            //vamos declarar o curso
-            Curso csharpColecoes = new Curso("C# Colecoes", "Marcelo Oliveira");
-            //...e adicionar 3 aulas a esse curso
-            //Trabalhando com Listas - 21 minutos;
-            //Criando uma Aula - 20 minutos
-            //Modelando com Coleções - 24 minutos
-            csharpColecoes.Adiciona(new Aula("Trabalhando com Listas", 21));
-            csharpColecoes.Adiciona(new Aula("Criando uma Aula", 20));
-            csharpColecoes.Adiciona(new Aula("Modelando com Coleções", 24));
-            //um aluno também tem matrícula!
-            //vamos criar a class Aluno com Nome e NumeroMatricula
+            //os elementos que entrarão no array
+            string aulaIntro = "Introdução às Coleções";
+            string aulaModelando = "Modelando a Classe Aula";
+            string aulaSets = "Trabalhando com Conjuntos";
 
-            //Instanciando 3 alunos com suas matrícula:
-            //Vanessa Tonini - 34672
-            //Ana Losnak - 5617
-            //Rafael Nercessian - 17645
-            Aluno a1 = new Aluno("Vanessa Tonini", 34672);
-            Aluno a2 = new Aluno("Ana Losnak", 5617);
-            Aluno a3 = new Aluno("Rafael Nercessian", 17645);
-            //Precisamos Matricular os alunos no curso, criando um método
-            csharpColecoes.Matricula(a1);
-            csharpColecoes.Matricula(a2);
-            csharpColecoes.Matricula(a3);
+            ////inicializando um array populado
+            //string[] aulas = new string[]
+            //{
+            //    aulaIntro,
+            //    aulaModelando,
+            //    aulaSets
+            //};
 
-            //Imprimindo os alunos matriculados
-            Console.WriteLine("Imprimindo os alunos matriculados");
-            foreach (var aluno in csharpColecoes.Alunos)
+            ////inicializando um array populado (SINTAXE SIMPLIFICADA)
+            //string[] aulas = 
+            //{
+            //    aulaIntro,
+            //    aulaModelando,
+            //    aulaSets
+            //};
+
+            //declarando um array vazio de tamanho 3
+            string[] aulas = new string[3];
+            //preenchendo posições no array pelo índice
+            aulas[0] = aulaIntro;
+            aulas[1] = aulaModelando;
+            aulas[2] = aulaSets;
+
+            //A linha abaixo não imprime os elementos!
+            Console.WriteLine(aulas); //System.String[]
+
+            Imprimir(aulas);
+
+            Console.WriteLine();
+
+            //Pegando o primeiro elemento
+            Console.WriteLine(aulas[0]);
+            //Pegando o último elemento
+            Console.WriteLine(aulas[aulas.Length - 1]);
+
+            //Modificando um elemento do array: ASSIM NÃO FUNCIONA!
+            aulaIntro = "Trabalhando com Arrays";
+            Imprimir(aulas);
+
+            //Modificando um elemento do array: DESSE JEITO FUNCIONA!
+            aulas[0] = "Trabalhando com Arrays";
+            Imprimir(aulas);
+
+            Console.WriteLine();
+
+            //Localizando a primeira ocorrência no array
+            Console.WriteLine("Aula 'modelando' está no índice " + Array.IndexOf(aulas, aulaModelando));
+            //Localizando a última ocorrência no array
+            Console.WriteLine(Array.LastIndexOf(aulas, aulaModelando));
+
+            //Revertendo a sequência do array
+            Array.Reverse(aulas);
+            Imprimir(aulas);
+
+            //Revertendo NOVAMENTE a sequência do array
+            Array.Reverse(aulas);
+            Imprimir(aulas);
+
+            //Redimensionando um array (truncando a última posição)
+            Array.Resize(ref aulas, 2);
+            Imprimir(aulas);
+
+            //Redimensionando um array (deixando a última posição vazia)
+            Array.Resize(ref aulas, 3);
+            Imprimir(aulas);
+
+            //Preenchendo a última posição do Array
+            aulas[aulas.Length - 1] = "Conclusão";
+            Imprimir(aulas);
+
+            //Ordenando o Array pela ordem natural dos elementos (alfabética)
+            Array.Sort(aulas);
+            Imprimir(aulas);
+
+            //Copiando um Array em outro
+            string[] copia = new string[2];
+            Array.Copy(aulas, 1, copia, 0, 2);
+            Imprimir(copia);
+
+            //Clonando um Array em um novo Array (note o cast as string[])
+            string[] clone = aulas.Clone() as string[];
+            Imprimir(clone);
+
+            //Limpando alguns índices do Array
+            Array.Clear(clone, 1, 2);
+            Imprimir(clone);
+        }
+
+        private static void Imprimir(string[] aulas)
+        {
+            Console.WriteLine();
+
+            ////Enumerando um array (laço FOREACH é mais simples)
+            //foreach (var aula in aulas)
+            //{
+            //    Console.WriteLine(aula);
+            //}
+
+            //Enumerando um array (laço FOR permite mais controle!)
+            for (int i = 0; i < aulas.Length; i++)
             {
-                Console.WriteLine(aluno);
+                Console.WriteLine(aulas[i]);
             }
-            //no formato "[Nome: , Matrícula: ]"
-
-            //Imprimir: "O aluno a1 está matriculado?"
-            Console.WriteLine($"O aluno a1 {a1.Nome} está matriculado?");
-            //Criar um método EstaMatriculado
-            Console.WriteLine(csharpColecoes.EstaMatriculado(a1));
-            //Vamos instanciar uma aluna (Vanessa Tonini)
-            Aluno tonini = new Aluno("Vanessa Tonini", 34672);
-            //e verificar se Tonini está matriculada
-            Console.WriteLine("Tonini está matriculada? " + csharpColecoes.EstaMatriculado(tonini));
-            //Mas a1 == a Tonini?
-            Console.WriteLine("a1 == a Tonini?");
-            Console.WriteLine(a1 == tonini);
-            //O que ocorreu? a1 é equals a Tonini?
-            Console.WriteLine("a1 é equals a Tonini?");
-            Console.WriteLine(a1.Equals(tonini));
-
-            //limpando o console
-            Console.Clear();
-            //já temos método para saber se o aluno está matriculado.
-            //Mas agora precisamos buscar aluno por número de matrícula
-
-            //pergunta: "Quem é o aluno com matrícula 5617?"
-            Console.WriteLine("Quem é o aluno com matrícula 5617?");
-            //implementando Curso.BuscaMatriculado
-            Aluno aluno5617 = csharpColecoes.BuscaMatriculado(5617);
-            //imprimindo o aluno5617 encontrado
-            Console.WriteLine("aluno5617: " + aluno5617);
-            //Funciona! Mas essa busca é eficiente?
-            //Introduzindo uma nova coleção: dicionário
-            //Um dicionário permite associar uma chave (no caso, matrícula)
-            //a um valor (o aluno)
-            //Vamos implementar um dicionário de alunos em Curso
-
-            //Quem é o aluno 5618?
-            Console.WriteLine("Quem é o aluno 5618?");
-            Console.WriteLine(csharpColecoes.BuscaMatriculado(5618));
-
-            //e se tentarmos adicionar outro aluno com mesma chave 5617?
-            Aluno fabio = new Aluno("Fabio Gushiken", 5617);
-            //csharpColecoes.Matricula(fabio);
-            //e se quisermos trocar o aluno que tem a mesma chave?
-            csharpColecoes.SubstituiAluno(fabio);
-            //pergunta: "Quem é o Aluno 5617 agora?"
-            Console.WriteLine("Quem é o Aluno 5617 agora?");
-            Console.WriteLine(csharpColecoes.BuscaMatriculado(5617));
-
-            //Como um dicionário armazena os valores (diagrama)
-            ///<image url="$(ProjectDir)\Slides\image2.png" scale=""/>
         }
     }
 }

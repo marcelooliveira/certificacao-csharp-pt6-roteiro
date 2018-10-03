@@ -1,93 +1,156 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
-namespace _01._01
+namespace _01._03
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            var json = await new HttpClient().GetStringAsync("https://gist.githubusercontent.com/saniyusuf/406b843afdfb9c6a86e25753fe2761f4/raw/523c324c7fcc36efab8224f9ebb7556c09b69a14/Film.JSON");
-            RootObject[] list = JsonConvert.DeserializeObject<RootObject[]>(json);
-            var filmes = list.Select(i => new Filme
-            {
-                Ano = i.Year,
-                Diretor = new Diretor { Nome = i.Director },
-                Titulo = i.Title
-            }).ToList();
-            var diretores = filmes.Select(i => i.Diretor).ToList();
-            LojaDeFilmes loja = new LojaDeFilmes
-            {
-                Filmes = filmes.ToList(),
-                Diretores = diretores
-            };
+            LojaDeFilmes loja = ObterDados();
 
-            using (var sw = new StreamWriter("loja.json"))
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
+            using (StringWriter stringWriter = new StringWriter())
             {
-                sw.Write(JsonConvert.SerializeObject(loja));
+                xmlSerializer.Serialize(stringWriter, loja);
+                Console.WriteLine(stringWriter);
+            }
+            using (FileStream fileStream = new FileStream("Loja.xml", FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                xmlSerializer.Serialize(fileStream, loja);
             }
 
-            //LojaDeFilmes loja = LojaDeFilmes.AdicionarFilme();
-            //BinaryFormatter formatter = new BinaryFormatter();
-            //using (FileStream outputStream =
-            //new FileStream("Filmes.bin", FileMode.OpenOrCreate, FileAccess.Write))
-            //{
-            //    formatter.Serialize(outputStream, loja);
-            //}
+            LojaDeFilmes copiaLoja;
+            using (FileStream fileStream =
+                new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = new StreamReader(fileStream))
+                {
+                    copiaLoja = (LojaDeFilmes)xmlSerializer.Deserialize(reader);
+                }
+            }
 
-            //LojaDeFilmes inputData;
-            //using (FileStream inputStream = new FileStream("Filmes.bin", FileMode.Open, FileAccess.Read))
-            //{
-            //    inputData = (LojaDeFilmes)formatter.Deserialize(inputStream);
-            //}
+            foreach (var filme in copiaLoja.Filmes)
+            {
+                Console.WriteLine(filme.Titulo);
+            }
+            Console.ReadKey();
+        }
+
+        private static LojaDeFilmes ObterDados()
+        {
+            return new LojaDeFilmes
+            {
+                Diretores = new List<Diretor>
+                {
+                    new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
+                    new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
+                    new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
+                    new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
+                    new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 }
+                },
+                Filmes = new List<Filme> {
+                    new Filme {
+                        Diretor = new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
+                        Titulo = "Avatar",
+                        Ano = "2009"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
+                        Titulo = "I Am Legend",
+                        Ano = "2007"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
+                        Titulo = "300",
+                        Ano = "2006"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
+                        Titulo = "The Avengers",
+                        Ano = "2012"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
+                        Titulo = "The Wolf of Wall Street",
+                        Ano = "2013"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
+                        Titulo = "Interstellar",
+                        Ano = "2014"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Game of Thrones",
+                        Ano = "2011–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Vikings",
+                        Ano = "2013–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Gotham",
+                        Ano = "2014–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Power",
+                        Ano = "2014–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Narcos",
+                        Ano = "2015–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Breaking Bad",
+                        Ano = "2008–2013"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
+                        Titulo = "Doctor Strange",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
+                        Titulo = "Rogue One: A Star Wars Story",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 },
+                        Titulo = "Assassin's Creed",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Luke Cage",
+                        Ano = "2016–"
+                    }
+                }
+            };
         }
     }
 
-    public class RootObject
-    {
-        public string Title { get; set; }
-        public string Year { get; set; }
-        public string Rated { get; set; }
-        public string Released { get; set; }
-        public string Runtime { get; set; }
-        public string Genre { get; set; }
-        public string Director { get; set; }
-        public string Writer { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
-        public string Language { get; set; }
-        public string Country { get; set; }
-        public string Awards { get; set; }
-        public string Poster { get; set; }
-        public string Metascore { get; set; }
-        public string imdbRating { get; set; }
-        public string imdbVotes { get; set; }
-        public string imdbID { get; set; }
-        public string Type { get; set; }
-        public string Response { get; set; }
-        public List<string> Images { get; set; }
-        public string totalSeasons { get; set; }
-        public bool? ComingSoon { get; set; }
-    }
-
     [Serializable]
-    class Diretor
+    public class Diretor
     {
         public string Nome { get; set; }
-
         [NonSerialized]
-        public int tempData;
+        public int NumeroFilmes;
     }
 
     [Serializable]
-    class Filme
+    public class Filme
     {
         public Diretor Diretor { get; set; }
         public string Titulo { get; set; }
@@ -95,15 +158,15 @@ namespace _01._01
     }
 
     [Serializable]
-    class LojaDeFilmes
+    public class LojaDeFilmes
     {
         public List<Diretor> Diretores = new List<Diretor>();
         public List<Filme> Filmes = new List<Filme>();
         public static LojaDeFilmes AdicionarFilme()
         {
-            LojaDeFilmes result = new LojaDeFilmes();
+            LojaDeFilmes loja = new LojaDeFilmes();
             // ...
-            return result;
+            return loja;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace _01._05
 {
@@ -25,9 +26,9 @@ namespace _01._05
                 inputData = (LojaDeFilmes)formatter.ReadObject(inputStream);
             }
 
-            foreach (var filme in inputData.Filmes)
+            foreach (var diretor in inputData.Diretores)
             {
-                Console.WriteLine(filme.Titulo);
+                Console.WriteLine(diretor.Nome);
             }
 
             Console.ReadKey();
@@ -135,23 +136,58 @@ namespace _01._05
         }
     }
 
-    [DataContract]
-    public class Diretor
+    [Serializable]
+    public class Diretor : ISerializable
     {
-        [DataMember]
         public string Nome { get; set; }
-        [IgnoreDataMember]
         public int NumeroFilmes;
+        public string Resumo { get; set; }
+
+        public Diretor(SerializationInfo info, StreamingContext context)
+        {
+            Resumo = info.GetString("Resumo");
+        }
+
+        public Diretor()
+        {
+        }
+
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Resumo", $"O diretor {0} tem {1} filmes disponíveis.");
+        }
+
+        [OnSerializing()]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+            Console.WriteLine($"Antes da serialização do diretor: {this.Nome}");
+        }
+
+        [OnSerialized()]
+        internal void OnSerializedMethod(StreamingContext context)
+        {
+            Console.WriteLine($"Depois da serialização do diretor: {this.Nome}");
+        }
+
+        [OnDeserializing()]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            Console.WriteLine($"Antes da serialização do diretor: {this.Nome}");
+        }
+
+        [OnDeserialized()]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            Console.WriteLine($"Depois da serialização do diretor: {this.Nome}");
+        }
     }
 
-    [DataContract]
+    [Serializable]
     public class Filme
     {
-        [DataMember]
         public Diretor Diretor { get; set; }
-        [DataMember]
         public string Titulo { get; set; }
-        [DataMember]
         public string Ano { get; set; }
     }
 
