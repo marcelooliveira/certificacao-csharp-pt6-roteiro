@@ -9,47 +9,164 @@ namespace _01._03
     {
         static void Main(string[] args)
         {
-            LojaDeFilmes loja = LojaDeFilmes.TestData();
-            XmlSerializer formatter = new XmlSerializer(typeof(LojaDeFilmes));
-            using (FileStream outputStream = new FileStream("Filmes.xml", FileMode.OpenOrCreate, FileAccess.Write))
+            LojaDeFilmes loja = ObterDados();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
+            using (StringWriter stringWriter = new StringWriter())
             {
-                formatter.Serialize(outputStream, loja);
+                xmlSerializer.Serialize(stringWriter, loja);
+                Console.WriteLine(stringWriter);
             }
-            LojaDeFilmes inputData;
-            using (FileStream inputStream =
-            new FileStream("Filmes.xml", FileMode.Open, FileAccess.Read))
+            using (FileStream fileStream = new FileStream("Loja.xml", FileMode.OpenOrCreate, FileAccess.Write))
             {
+                xmlSerializer.Serialize(fileStream, loja);
             }
+
+            LojaDeFilmes copiaLoja;
+            using (FileStream fileStream =
+                new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = new StreamReader(fileStream))
+                {
+                    copiaLoja = (LojaDeFilmes)xmlSerializer.Deserialize(reader);
+                }
+            }
+
+            foreach (var filme in copiaLoja.Filmes)
+            {
+                Console.WriteLine(filme.Titulo);
+            }
+            Console.ReadKey();
+        }
+
+        private static LojaDeFilmes ObterDados()
+        {
+            return new LojaDeFilmes
+            {
+                Diretores = new List<Diretor>
+                {
+                    new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
+                    new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
+                    new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
+                    new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
+                    new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
+                    new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
+                    new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 }
+                },
+                Filmes = new List<Filme> {
+                    new Filme {
+                        Diretor = new Diretor { Nome = "James Cameron", NumeroFilmes = 5 },
+                        Titulo = "Avatar",
+                        Ano = "2009"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Francis Lawrence", NumeroFilmes = 3 },
+                        Titulo = "I Am Legend",
+                        Ano = "2007"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Zack Snyder", NumeroFilmes = 6 },
+                        Titulo = "300",
+                        Ano = "2006"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Joss Whedon", NumeroFilmes = 7 },
+                        Titulo = "The Avengers",
+                        Ano = "2012"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Martin Scorsese", NumeroFilmes = 4 },
+                        Titulo = "The Wolf of Wall Street",
+                        Ano = "2013"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Christopher Nolan", NumeroFilmes = 8 },
+                        Titulo = "Interstellar",
+                        Ano = "2014"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Game of Thrones",
+                        Ano = "2011–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Vikings",
+                        Ano = "2013–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Gotham",
+                        Ano = "2014–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Power",
+                        Ano = "2014–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Narcos",
+                        Ano = "2015–"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Breaking Bad",
+                        Ano = "2008–2013"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Scott Derrickson", NumeroFilmes = 4 },
+                        Titulo = "Doctor Strange",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Gareth Edwards", NumeroFilmes = 3 },
+                        Titulo = "Rogue One: A Star Wars Story",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "Justin Kurzel", NumeroFilmes = 6 },
+                        Titulo = "Assassin's Creed",
+                        Ano = "2016"
+                    },
+                    new Filme {
+                        Diretor = new Diretor { Nome = "N/A" },
+                        Titulo = "Luke Cage",
+                        Ano = "2016–"
+                    }
+                }
+            };
         }
     }
 
     [Serializable]
-    class Diretor
+    public class Diretor
     {
         public string Nome { get; set; }
-
         [NonSerialized]
-        public int tempData;
+        public int NumeroFilmes;
     }
 
     [Serializable]
-    class Filme
+    public class Filme
     {
         public Diretor Diretor { get; set; }
         public string Titulo { get; set; }
-        public int Ano { get; set; }
+        public string Ano { get; set; }
     }
 
     [Serializable]
-    class LojaDeFilmes
+    public class LojaDeFilmes
     {
-        List<Diretor> Diretor = new List<Diretor>();
-        List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes TestData()
+        public List<Diretor> Diretores = new List<Diretor>();
+        public List<Filme> Filmes = new List<Filme>();
+        public static LojaDeFilmes AdicionarFilme()
         {
-            LojaDeFilmes result = new LojaDeFilmes();
+            LojaDeFilmes loja = new LojaDeFilmes();
             // ...
-            return result;
+            return loja;
         }
     }
 }
