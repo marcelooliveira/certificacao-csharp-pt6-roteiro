@@ -10,6 +10,21 @@ namespace _01._03
     {
         static void Main(string[] args)
         {
+            //TAREFA: transferir os dados de um objeto de uma classe 
+            //  para outra classe, usando um arquivo XML intermediário
+            //
+            //1) Obter os dados de uma loja de filmes (classe LojaDeFilmes)
+            //  1.1) Acessar o método ObterDados()
+            //2) Salvar os dados da loja num arquivo xml
+            //  2.1) A classe XmlSerializer
+            //  2.2) Gravando xml em string com StringWriter e com Serialize()
+            //  2.3) Imprimindo o xml na tela
+            //  2.4) Abrindo stream de arquivo com FileStream
+            //  2.5) Gravando xml no arquivo com Serialize()
+            //3) Ler o arquivo xml e converter em um objeto MovieStore
+            //  3.1) Usando uma nova instância de XmlSerializer
+            //  3.2) Abrindo arquivo para leitura com FileStream
+            //  3.3) Desserializando stream com método Deserialize()
             LojaDeFilmes loja = ObterDados();
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
@@ -28,10 +43,7 @@ namespace _01._03
             using (FileStream fileStream =
                 new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
             {
-                using (var reader = new StreamReader(fileStream))
-                {
-                    movieStore = (MovieStore)xmlSerializer2.Deserialize(reader);
-                }
+                movieStore = (MovieStore)xmlSerializer2.Deserialize(fileStream);
             }
 
             foreach (var movie in movieStore.Movies)
@@ -39,6 +51,8 @@ namespace _01._03
                 Console.WriteLine(movie.Title);
             }
             Console.ReadKey();
+
+            ///<image url="$(ProjectDir)\img01.png"/>
         }
 
         private static LojaDeFilmes ObterDados()
