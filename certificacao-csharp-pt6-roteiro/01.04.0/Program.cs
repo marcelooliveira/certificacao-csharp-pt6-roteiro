@@ -18,14 +18,14 @@ namespace _01._04._0
             LojaDeFilmes loja = ObterDados();
 
             //1) usando JavaScriptSerializer
-            //var serializer = new JavaScriptSerializer();
-            //var json = serializer.Serialize(loja);
-            //Console.WriteLine(json);
-            //var copiaLoja = serializer.Deserialize<LojaDeFilmes>(json);
-            //foreach (var filme in copiaLoja.Filmes)
-            //{
-            //    Console.WriteLine(filme.Titulo);
-            //}
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(loja);
+            Console.WriteLine(json);
+            var copiaLoja = serializer.Deserialize<LojaDeFilmes>(json);
+            foreach (var filme in copiaLoja.Filmes)
+            {
+                Console.WriteLine(filme.Titulo);
+            }
 
             //2) usando DataContractJsonSerializer
             //var serializer = new DataContractJsonSerializer(typeof(LojaDeFilmes));
@@ -50,14 +50,14 @@ namespace _01._04._0
             //}
 
             //3) usando Json.NET (NewtonSoft)
-            var json = JsonConvert.SerializeObject(loja);
-            Console.WriteLine(json);
-            var copiaLoja = JsonConvert.DeserializeObject<LojaDeFilmes>(json);
+            //var json = JsonConvert.SerializeObject(loja);
+            //Console.WriteLine(json);
+            //var copiaLoja = JsonConvert.DeserializeObject<LojaDeFilmes>(json);
 
-            foreach (var filme in copiaLoja.Filmes)
-            {
-                Console.WriteLine(filme.Titulo);
-            }
+            //foreach (var filme in copiaLoja.Filmes)
+            //{
+            //    Console.WriteLine(filme.Titulo);
+            //}
 
             //https://www.newtonsoft.com/json
             ///< image url="$(ProjectDir)/img01.png"/>
@@ -173,7 +173,7 @@ namespace _01._04._0
     {
         [DataMember]
         public string Nome { get; set; }
-        [NonSerialized]
+        [IgnoreDataMember]
         public int NumeroFilmes;
     }
 
