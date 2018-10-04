@@ -25,6 +25,7 @@ namespace _01._03
             //  3.1) Usando uma nova instância de XmlSerializer
             //  3.2) Abrindo arquivo para leitura com FileStream
             //  3.3) Desserializando stream com método Deserialize()
+
             LojaDeFilmes loja = ObterDados();
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
@@ -39,7 +40,9 @@ namespace _01._03
             }
 
             XmlSerializer xmlSerializer2 = new XmlSerializer(typeof(MovieStore));
+
             MovieStore movieStore;
+
             using (FileStream fileStream =
                 new FileStream("Loja.xml", FileMode.Open, FileAccess.Read))
             {
