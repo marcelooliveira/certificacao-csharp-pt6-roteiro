@@ -10,11 +10,9 @@ namespace _01._03
         public List<Diretor> Diretores = new List<Diretor>();
         [XmlArray("Movies")]
         public List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes AdicionarFilme(Filme filme)
+        public static void AdicionarFilme(Filme filme)
         {
-            LojaDeFilmes loja = new LojaDeFilmes();
-            // ...
-            return loja;
+            // Aqui vai a lógica de inserção de filme...
         }
     }
 

@@ -26,6 +26,7 @@ namespace _01._03
             //  3.2) Abrindo arquivo para leitura com FileStream
             //  3.3) Desserializando stream com método Deserialize()
 
+            //INÍCIO DO CÓDIGO DO PRIMEIRO SISTEMA
             LojaDeFilmes loja = ObterDados();
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(LojaDeFilmes));
@@ -39,6 +40,7 @@ namespace _01._03
                 xmlSerializer.Serialize(fileStream, loja);
             }
 
+            //AQUI VIRIA O CÓDIGO DO SEGUNDO SISTEMA
             XmlSerializer xmlSerializer2 = new XmlSerializer(typeof(MovieStore));
 
             MovieStore movieStore;
