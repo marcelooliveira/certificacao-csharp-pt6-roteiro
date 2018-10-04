@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace _01._01
+namespace _01._02
 {
-    [XmlRoot("MovieStore")]
+    [JsonObject("MovieStore")]
     public class LojaDeFilmes
     {
-        [XmlArray("Directors")]
+        [JsonProperty("Directors")]
         public List<Diretor> Diretores = new List<Diretor>();
-        [XmlArray("Movies")]
+        [JsonProperty("Movies")]
         public List<Filme> Filmes = new List<Filme>();
         public static void AdicionarFilme(Filme filme)
         {
@@ -16,23 +17,23 @@ namespace _01._01
         }
     }
 
-    [XmlType("Director")]
+    [JsonObject("Director")]
     public class Diretor
     {
-        [XmlElement("Name")]
+        [JsonProperty("Name")]
         public string Nome { get; set; }
-        [XmlIgnore]
+        [JsonIgnore]
         public int NumeroFilmes;
     }
 
-    [XmlType("Movie")]
+    [JsonObject("Movie")]
     public class Filme
     {
-        [XmlElement("Director")]
+        [JsonProperty("Director")]
         public Diretor Diretor { get; set; }
-        [XmlElement("Title")]
+        [JsonProperty("Title")]
         public string Titulo { get; set; }
-        [XmlElement("Year")]
+        [JsonProperty("Year")]
         public string Ano { get; set; }
     }
 }

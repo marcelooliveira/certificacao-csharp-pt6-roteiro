@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace _01._01
+namespace _01._02
 {
     public class MovieStore
     {

@@ -16,48 +16,31 @@ namespace _01._02
         static void Main(string[] args)
         {
             LojaDeFilmes loja = ObterDados();
+            string json;
+            MovieStore movieStore;
 
             //1) usando JavaScriptSerializer
+            Console.WriteLine("1) usando JavaScriptSerializer");
             var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(loja);
+            json = serializer.Serialize(loja);
             Console.WriteLine(json);
-            var copiaLoja = serializer.Deserialize<LojaDeFilmes>(json);
-            foreach (var filme in copiaLoja.Filmes)
+            movieStore = serializer.Deserialize<MovieStore>(json);
+            foreach (var movie in movieStore.Movies)
             {
-                Console.WriteLine(filme.Titulo);
+                Console.WriteLine(movie.Title);
             }
+            Console.WriteLine();
+         
+            //2) usando Json.NET (NewtonSoft)
+            Console.WriteLine("2) usando Json.NET (NewtonSoft)");
+            json = JsonConvert.SerializeObject(loja);
+            Console.WriteLine(json);
+            movieStore = JsonConvert.DeserializeObject<MovieStore>(json);
 
-            //2) usando DataContractJsonSerializer
-            //var serializer = new DataContractJsonSerializer(typeof(LojaDeFilmes));
-            //var stream = new MemoryStream();
-            //string json = "";
-            //LojaDeFilmes copiaLoja;
-            //using (var writer = new StreamWriter(stream))
-            //{
-            //    serializer.WriteObject(stream, loja);
-            //    using (var reader = new StreamReader(stream))
-            //    {
-            //        stream.Position = 0;
-            //        json = reader.ReadToEnd();
-            //        Console.WriteLine(json);
-            //        stream.Position = 0;
-            //        copiaLoja = (LojaDeFilmes)serializer.ReadObject(reader.BaseStream);
-            //    }
-            //}
-            //foreach (var filme in copiaLoja.Filmes)
-            //{
-            //    Console.WriteLine(filme.Titulo);
-            //}
-
-            //3) usando Json.NET (NewtonSoft)
-            //var json = JsonConvert.SerializeObject(loja);
-            //Console.WriteLine(json);
-            //var copiaLoja = JsonConvert.DeserializeObject<LojaDeFilmes>(json);
-
-            //foreach (var filme in copiaLoja.Filmes)
-            //{
-            //    Console.WriteLine(filme.Titulo);
-            //}
+            foreach (var filme in movieStore.Movies)
+            {
+                Console.WriteLine(filme.Title);
+            }
 
             //https://www.newtonsoft.com/json
             ///< image url="$(ProjectDir)/img01.png"/>
@@ -165,41 +148,6 @@ namespace _01._02
                     }
                 }
             };
-        }
-    }
-
-    [DataContract]
-    class Diretor
-    {
-        [DataMember]
-        public string Nome { get; set; }
-        [IgnoreDataMember]
-        public int NumeroFilmes;
-    }
-
-    [DataContract]
-    class Filme
-    {
-        [DataMember]
-        public Diretor Diretor { get; set; }
-        [DataMember]
-        public string Titulo { get; set; }
-        [DataMember]
-        public string Ano { get; set; }
-    }
-
-    [DataContract]
-    class LojaDeFilmes
-    {
-        [DataMember]
-        public List<Diretor> Diretores = new List<Diretor>();
-        [DataMember]
-        public List<Filme> Filmes = new List<Filme>();
-        public static LojaDeFilmes AdicionarFilme()
-        {
-            LojaDeFilmes loja = new LojaDeFilmes();
-            // ...
-            return loja;
         }
     }
 }

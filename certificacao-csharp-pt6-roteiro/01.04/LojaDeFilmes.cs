@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
-namespace _01._01
+namespace _01._04
 {
-    [XmlRoot("MovieStore")]
+    [DataContract(Name="MovieStore")]
     public class LojaDeFilmes
     {
-        [XmlArray("Directors")]
+        [DataMember(Name="Directors")]
         public List<Diretor> Diretores = new List<Diretor>();
-        [XmlArray("Movies")]
+        [DataMember(Name = "Movies")]
         public List<Filme> Filmes = new List<Filme>();
         public static void AdicionarFilme(Filme filme)
         {
@@ -16,23 +16,23 @@ namespace _01._01
         }
     }
 
-    [XmlType("Director")]
+    [DataContract(Name = "Director")]
     public class Diretor
     {
-        [XmlElement("Name")]
+        [DataMember(Name = "Name")]
         public string Nome { get; set; }
-        [XmlIgnore]
+        [IgnoreDataMember]
         public int NumeroFilmes;
     }
 
-    [XmlType("Movie")]
+    [DataContract(Name = "Movie")]
     public class Filme
     {
-        [XmlElement("Director")]
+        [DataMember(Name = "Director")]
         public Diretor Diretor { get; set; }
-        [XmlElement("Title")]
+        [DataMember(Name = "Title")]
         public string Titulo { get; set; }
-        [XmlElement("Year")]
+        [DataMember(Name = "Year")]
         public string Ano { get; set; }
     }
 }
