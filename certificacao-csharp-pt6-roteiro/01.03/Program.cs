@@ -18,18 +18,18 @@ namespace _01._03
 
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream outputStream =
-            new FileStream("Filmes.bin", FileMode.OpenOrCreate, FileAccess.Write))
+            new FileStream("Loja.bin", FileMode.OpenOrCreate, FileAccess.Write))
             {
                 formatter.Serialize(outputStream, loja);
             }
 
-            LojaDeFilmes inputData;
-            using (FileStream inputStream = new FileStream("Filmes.bin", FileMode.Open, FileAccess.Read))
+            LojaDeFilmes objetoDestino;
+            using (FileStream inputStream = new FileStream("Loja.bin", FileMode.Open, FileAccess.Read))
             {
-                inputData = (LojaDeFilmes)formatter.Deserialize(inputStream);
+                objetoDestino = (LojaDeFilmes)formatter.Deserialize(inputStream);
             }
 
-            foreach (var filme in inputData.Filmes)
+            foreach (var filme in objetoDestino.Filmes)
             {
                 Console.WriteLine(filme.Titulo);
             }
