@@ -26,6 +26,8 @@ namespace _01._03
             //  3.2) Abrindo arquivo para leitura com FileStream
             //  3.3) Desserializando stream com método Deserialize()
 
+            ///<image url="$(ProjectDir)\img01.png"/>
+            
             //INÍCIO DO CÓDIGO DO PRIMEIRO SISTEMA
             LojaDeFilmes loja = ObterDados();
 
@@ -57,7 +59,6 @@ namespace _01._03
             }
             Console.ReadKey();
 
-            ///<image url="$(ProjectDir)\img01.png"/>
         }
 
         private static LojaDeFilmes ObterDados()

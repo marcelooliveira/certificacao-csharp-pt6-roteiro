@@ -17,21 +17,21 @@ namespace _01._02
         {
             LojaDeFilmes loja = ObterDados();
             string json;
-            MovieStore movieStore;
 
             //1) usando JavaScriptSerializer
             Console.WriteLine("1) usando JavaScriptSerializer");
             var serializer = new JavaScriptSerializer();
             json = serializer.Serialize(loja);
             Console.WriteLine(json);
-            movieStore = serializer.Deserialize<MovieStore>(json);
-            foreach (var movie in movieStore.Movies)
+            LojaDeFilmes copiaLoja = serializer.Deserialize<LojaDeFilmes>(json);
+            foreach (var filme in copiaLoja.Filmes)
             {
-                Console.WriteLine(movie.Title);
+                Console.WriteLine(filme.Titulo);
             }
             Console.WriteLine();
          
             //2) usando Json.NET (NewtonSoft)
+            MovieStore movieStore;
             Console.WriteLine("2) usando Json.NET (NewtonSoft)");
             json = JsonConvert.SerializeObject(loja);
             Console.WriteLine(json);
